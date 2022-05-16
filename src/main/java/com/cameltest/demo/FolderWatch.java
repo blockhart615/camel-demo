@@ -12,9 +12,9 @@ public class FolderWatch extends RouteBuilder {
         String recursive = "recursive=" + Config.RECURSIVE;
         String regex = "antInclude=**/*.moveme";
         String watchEvents = "events=CREATE,MODIFY";
-        
 
         from("file-watch:" + Config.INBOX + "?" + watchEvents + "&" + recursive + "&" + regex)
+        .process(new FileProcessor()) // essentially calls the process() method in the FileProcessor class
         .log("FILE WATCH: ${header." + Exchange.FILE_NAME + "}")
         .to("file:" + Config.OUTBOX, "file:" + Config.ARCHIVE);
 	}
